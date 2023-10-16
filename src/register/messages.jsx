@@ -22,6 +22,11 @@ const messages = defineMessages({
     defaultMessage: 'Public username',
     description: 'Label that appears above username field',
   },
+  'registration.organization.label': {
+    id: 'registration.organization.label',
+    defaultMessage: 'Organization name',
+    description: 'Label that appears above organization field',
+  },
   'registration.password.label': {
     id: 'registration.password.label',
     defaultMessage: 'Password',
@@ -57,6 +62,11 @@ const messages = defineMessages({
     id: 'help.text.email',
     defaultMessage: 'For account activation and important updates',
     description: 'Help text for email field on registration page',
+  },
+  'help.text.organization': {
+    id: 'help.text.organization',
+    defaultMessage: 'This field will be used to let users know which organization you belong to',
+    description: 'Help text for organization field on registration page',
   },
   // Form buttons
   'create.account.for.free.button': {
@@ -100,6 +110,11 @@ const messages = defineMessages({
     id: 'empty.username.field.error',
     defaultMessage: 'Username must be between 2 and 30 characters',
     description: 'Error message for empty username field',
+  },
+  'empty.organization.field.error': {
+    id: 'empty.username.organization.error',
+    defaultMessage: 'Please choose your organization',
+    description: 'Error message for empty organization field',
   },
   'empty.password.field.error': {
     id: 'empty.password.field.error',

@@ -27,7 +27,7 @@ import {
 } from './data/constants';
 import { getBackendValidations, isFormValid, prepareRegistrationPayload } from './data/utils';
 import messages from './messages';
-import { EmailField, NameField, UsernameField } from './RegistrationFields';
+import { EmailField, NameField, OrganizationField, UsernameField } from './RegistrationFields';
 import {
   InstitutionLogistration, PasswordField, RedirectLogistration, ThirdPartyAuthAlert,
 } from '../common-components';
@@ -335,6 +335,16 @@ const RegistrationPage = (props) => {
                 errorMessage={errors.username}
                 helpText={[formatMessage(messages['help.text.username.1']), formatMessage(messages['help.text.username.2'])]}
                 floatingLabel={formatMessage(messages['registration.username.label'])}
+              />
+              <OrganizationField
+                name="organization"
+                value={formFields.organization}
+                shouldFetchOrganizationList={false}
+                handleChange={handleOnChange}
+                handleErrorChange={handleErrorChange}
+                errorMessage={errors.organization}
+                helpText={[formatMessage(messages['help.text.organization'])]}
+                floatingLabel={formatMessage(messages['registration.organization.label'])}
               />
               {!currentProvider && (
                 <PasswordField
