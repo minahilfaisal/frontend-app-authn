@@ -2,6 +2,7 @@ import {
   BACKUP_REGISTRATION_DATA,
   REGISTER_CLEAR_USERNAME_SUGGESTIONS,
   REGISTER_FORM_VALIDATIONS,
+  REGISTER_FORM_ORGANIZATIONS,
   REGISTER_NEW_USER,
   REGISTER_SET_COUNTRY_CODE, REGISTER_SET_USER_PIPELINE_DATA_LOADED,
   REGISTRATION_CLEAR_BACKEND_ERROR,
@@ -15,6 +16,7 @@ export const storeName = 'register';
 
 export const defaultState = {
   backendCountryCode: '',
+  backendOrganizationsList: [],
   registrationError: {},
   registrationResult: {},
   registrationFormData: {
@@ -22,13 +24,13 @@ export const defaultState = {
       marketingEmailsOptIn: true,
     },
     formFields: {
-      name: '', email: '', username: '', password: '', organization: '',
+      name: '', email: '', username: '', password: ''
     },
     emailSuggestion: {
       suggestion: '', type: '',
     },
     errors: {
-      name: '', email: '', username: '', password: '', organization: '',
+      name: '', email: '', username: '', password: ''
     },
   },
   validations: null,
@@ -96,6 +98,18 @@ const reducer = (state = defaultState, action = {}) => {
         ...state,
         validationApiRateLimited: true,
         validations: null,
+      };
+    case REGISTER_FORM_ORGANIZATIONS.SUCCESS: {
+      const { organizations } = action.payload.organizations;
+      return {
+        ...state,
+        backendOrganizationsList: organizations,
+      };
+    }
+    case REGISTER_FORM_ORGANIZATIONS.FAILURE:
+      return {
+        ...state,
+        backendOrganizationsList: [],
       };
     case REGISTER_CLEAR_USERNAME_SUGGESTIONS:
       return {

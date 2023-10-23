@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { getConfig } from '@edx/frontend-platform';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
@@ -7,7 +7,10 @@ import PropTypes from 'prop-types';
 import { FormFieldRenderer } from '../../field-renderer';
 import { FIELDS } from '../data/constants';
 import messages from '../messages';
-import { CountryField, HonorCode, TermsOfService } from '../RegistrationFields';
+import { CountryField, HonorCode, OrganizationField, TermsOfService } from '../RegistrationFields';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrganizationList } from '../data/actions';
+
 
 /**
  * Fields on registration page that are not the default required fields (name, email, username, password).
@@ -32,11 +35,18 @@ const ConfigurableRegistrationForm = (props) => {
     setFormFields,
     autoSubmitRegistrationForm,
   } = props;
+  const dispatch = useDispatch();
+
+  const myfunc = () => {
+    dispatch(fetchOrganizationList());
+  };
 
   const countryList = useMemo(() => getCountryList(getLocale()), []);
+  const organizationList = useMemo(() => getCountryList(getLocale()), []);
 
-  let showTermsOfServiceAndHonorCode = false;
-  let showCountryField = false;
+  let showTermsOfServiceAndHonorCode = true;
+  let showCountryField = true;
+  let showOrganizationField = true;
 
   const formFieldDescriptions = [];
   const honorCode = [];
@@ -48,7 +58,11 @@ const ConfigurableRegistrationForm = (props) => {
 
   useEffect(() => {
     if (!formFields.country) {
+      myfunc()
       setFormFields(prevState => ({ ...prevState, country: { countryCode: '', displayValue: '' } }));
+    }
+    if (!formFields.organization) {
+      setFormFields(prevState => ({ ...prevState, organization: { organizationCode: '', displayValue: '' } }));
     }
   });
 
@@ -170,6 +184,22 @@ const ConfigurableRegistrationForm = (props) => {
           countryList={countryList}
           selectedCountry={formFields.country}
           errorMessage={fieldErrors.country || ''}
+          onChangeHandler={handleOnChange}
+          handleErrorChange={handleErrorChange}
+          onBlurHandler={handleOnBlur}
+          onFocusHandler={handleOnFocus}
+        />
+      </span>,
+    );
+  }
+
+  if (flags.showConfigurableEdxFields || showOrganizationField) {
+    formFieldDescriptions.push(
+      <span key="organization">
+        <OrganizationField
+          organizationList={organizationList}
+          selectedCountry={formFields.organization}
+          errorMessage={fieldErrors.organization || ''}
           onChangeHandler={handleOnChange}
           handleErrorChange={handleErrorChange}
           onBlurHandler={handleOnBlur}

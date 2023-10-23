@@ -3,9 +3,13 @@ import { logError, logInfo } from '@edx/frontend-platform/logging';
 import { call, put, takeEvery } from 'redux-saga/effects';
 
 import {
+  fetchOrganizationListBegin,
+  fetchOrganizationListFailure,
+  fetchOrganizationListSuccess,
   fetchRealtimeValidationsBegin,
   fetchRealtimeValidationsFailure,
   fetchRealtimeValidationsSuccess,
+  REGISTER_FORM_ORGANIZATIONS,
   REGISTER_FORM_VALIDATIONS,
   REGISTER_NEW_USER,
   registerNewUserBegin,
@@ -13,7 +17,7 @@ import {
   registerNewUserSuccess,
 } from './actions';
 import { INTERNAL_SERVER_ERROR } from './constants';
-import { getFieldsValidations, registerRequest } from './service';
+import { getFieldsValidations, registerRequest, getOrganizationsList } from './service';
 
 export function* handleNewUserRegistration(action) {
   try {
@@ -53,7 +57,25 @@ export function* fetchRealtimeValidations(action) {
     }
   }
 }
+
+export function* fetchOrganizationList() {
+  try {
+    yield put(fetchOrganizationListBegin());
+    const { organizationsList } = yield call(getOrganizationsList);
+
+    yield put(fetchOrganizationListSuccess(organizationsList));
+  } catch (e) {
+    if (e.response && e.response.status === 403) {
+      yield put(fetchOrganizationListFailure());
+      logInfo(e);
+    } else {
+      logError(e);
+    }
+  }
+}
+
 export default function* saga() {
   yield takeEvery(REGISTER_NEW_USER.BASE, handleNewUserRegistration);
   yield takeEvery(REGISTER_FORM_VALIDATIONS.BASE, fetchRealtimeValidations);
+  yield takeEvery(REGISTER_FORM_ORGANIZATIONS.BASE, fetchOrganizationList);
 }

@@ -44,3 +44,22 @@ export async function getFieldsValidations(formPayload) {
     fieldValidations: data,
   };
 }
+
+export async function getOrganizationsList() {
+  const requestConfig = {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  };
+
+  const { data } = await getHttpClient()
+    .get(
+      `${getConfig().LMS_BASE_URL}/api/user/v1/organizations/registration`,
+      requestConfig,
+    )
+    .catch((e) => {
+      throw (e);
+    });
+
+  return {
+    organizationsList: data,
+  };
+}
