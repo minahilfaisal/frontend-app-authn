@@ -95,11 +95,13 @@ const ConfigurableRegistrationForm = (props) => {
     }
   };
 
-  const handleOnChange = (event, countryValue = null) => {
+  const handleOnChange = (event, countryValue = null, organizationValue = null) => {
     const { name } = event.target;
     let value;
     if (countryValue) {
       value = { ...countryValue };
+    } else if (organizationValue) {
+      value = organizationValue;
     } else {
       value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       if (event.target.type === 'checkbox') {

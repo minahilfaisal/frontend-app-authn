@@ -30,26 +30,6 @@ const OrganizationField = (props) => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const organizationList = useSelector(state => state.register.backendOrganizationsList);
-  let backendOrganizationCode = '';
-
-  useEffect(() => {
-    if (backendOrganizationCode && backendOrganizationCode !== selectedOrganization?.organizationCode) {
-      let organizationCode = '';
-      let organizationDisplayValue = '';
-
-      const organizationVal = organizationList.find(
-        (organization) => (organization[ORGANIZATION_CODE_KEY].toLowerCase() === backendOrganizationCode.toLowerCase()),
-      );
-      if (organizationVal) {
-        organizationCode = organizationVal[ORGANIZATION_CODE_KEY];
-        organizationDisplayValue = organizationVal[ORGANIZATION_DISPLAY_KEY];
-      }
-      onChangeHandler(
-        { target: { name: 'organization' } },
-        { organizationCode, displayValue: organizationDisplayValue },
-      );
-    }
-  }, [backendOrganizationCode, organizationList]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOnBlur = (event) => {
     // Do not run validations when drop-down arrow is clicked
@@ -63,7 +43,7 @@ const OrganizationField = (props) => {
       value.trim(), organizationList, formatMessage(messages['empty.organization.field.error']),
     );
 
-    onChangeHandler({ target: { name: 'organization' } }, { organizationCode, displayValue });
+    onChangeHandler({ target: { name: 'organization' } }, null, displayValue );
     handleErrorChange('organization', error);
   };
 
@@ -78,7 +58,7 @@ const OrganizationField = (props) => {
   };
 
   const handleOnChange = (value) => {
-    onChangeHandler({ target: { name: 'organization' } }, { organizationCode: '', displayValue: value });
+    onChangeHandler({ target: { name: 'organization' } }, null, value );
   };
 
   const getOrganizationList = () => organizationList.map((organization) => (
