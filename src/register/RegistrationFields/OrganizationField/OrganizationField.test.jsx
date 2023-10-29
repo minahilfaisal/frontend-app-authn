@@ -1,15 +1,16 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { mount } from 'enzyme';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../data/actions';
-import { NameField } from '../index';
+import { ORGANIZATION_CODE_KEY, ORGANIZATION_DISPLAY_KEY } from './validator';
+import { OrganizationField } from '../index';
 
-const IntlNameField = injectIntl(NameField);
+const IntlOrganizationField = injectIntl(OrganizationField);
 const mockStore = configureStore();
 
 jest.mock('react-router-dom', () => {
@@ -28,7 +29,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-describe('NameField', () => {
+describe('OrganizationField', () => {
   let props = {};
   let store = {};
 
@@ -51,12 +52,18 @@ describe('NameField', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     props = {
-      name: 'name',
-      value: '',
+      organizationList: [{
+        [ORGANIZATION_CODE_KEY]: 'orgX1',
+        [ORGANIZATION_DISPLAY_KEY]: 'Demo Org 1',
+      }],
+      selectedOrganization: {
+        organizationCode: '',
+        displayValue: '',
+      },
       errorMessage: '',
-      handleChange: jest.fn(),
+      onChangeHandler: jest.fn(),
       handleErrorChange: jest.fn(),
-      floatingLabel: '',
+      onFocusHandler: jest.fn(),
     };
     window.location = { search: '' };
   });
@@ -65,73 +72,109 @@ describe('NameField', () => {
     jest.clearAllMocks();
   });
 
-  describe('Test Name Field', () => {
-    const fieldValidation = { name: 'Enter your full name' };
+  describe('Test Organization Field', () => {
+    mergeConfig({
+      SHOW_CONFIGURABLE_EDX_FIELDS: true,
+    });
 
-    it('should run name field validation when onBlur is fired', () => {
-      const nameField = mount(routerWrapper(reduxWrapper(<IntlNameField {...props} />)));
+    const emptyFieldValidation = {
+      organization: 'Select your organization.',
+    };
 
-      nameField.find('input#name').simulate('blur', { target: { value: '', name: 'name' } });
+    it('should run organization field validation when onBlur is fired', () => {
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+      organizationField.find('input[name="organization"]').simulate('blur', { target: { value: '', name: 'organization' } });
       expect(props.handleErrorChange).toHaveBeenCalledTimes(1);
       expect(props.handleErrorChange).toHaveBeenCalledWith(
-        'name',
-        fieldValidation.name,
+        'organization',
+        emptyFieldValidation.organization,
       );
     });
 
-    it('should update errors for frontend validations', () => {
-      const nameField = mount(routerWrapper(reduxWrapper(<IntlNameField {...props} />)));
+    it('should not run organization field validation when onBlur is fired by drop-down arrow icon click', () => {
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+      organizationField.find('input[name="organization"]').simulate('blur', {
+        target: { value: '', name: 'organization' },
+        relatedTarget: { type: 'button', className: 'btn-icon pgn__form-autosuggest__icon-button' },
+      });
+      expect(props.handleErrorChange).toHaveBeenCalledTimes(0);
+    });
 
-      nameField.find('input#name').simulate(
-        'blur', { target: { value: 'https://invalid-name.com', name: 'name' } },
-      );
+    it('should update errors for frontend validations', () => {
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+
+      organizationField.find('input[name="organization"]').simulate('blur', { target: { value: '', name: 'organization' } });
       expect(props.handleErrorChange).toHaveBeenCalledTimes(1);
       expect(props.handleErrorChange).toHaveBeenCalledWith(
-        'name',
-        'Enter a valid name',
+        'organization',
+        emptyFieldValidation.organization,
       );
     });
 
     it('should clear error on focus', () => {
-      const nameField = mount(routerWrapper(reduxWrapper(<IntlNameField {...props} />)));
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
 
-      nameField.find('input#name').simulate('focus', { target: { value: '', name: 'name' } });
+      organizationField.find('input[name="organization"]').simulate('focus', { target: { value: '', name: 'organization' } });
       expect(props.handleErrorChange).toHaveBeenCalledTimes(1);
       expect(props.handleErrorChange).toHaveBeenCalledWith(
-        'name',
+        'organization',
         '',
       );
     });
 
-    it('should call backend validation api on blur event, if frontend validations have passed', () => {
-      store.dispatch = jest.fn(store.dispatch);
-      props = {
-        ...props,
-        shouldFetchUsernameSuggestions: true,
-      };
-      const nameField = mount(routerWrapper(reduxWrapper(<IntlNameField {...props} />)));
+    // it('should update state and store list of organizations in redux store', () => {
+    //   store = mockStore({
+    //     ...initialState,
+    //     register: {
+    //       ...initialState.register,
+    //       backendOrganizationList: [],
+    //     },
+    //   });
 
-      // Enter a valid name so that frontend validations are passed
-      nameField.find('input#name').simulate('blur', { target: { value: 'test', name: 'name' } });
-      expect(store.dispatch).toHaveBeenCalledWith(fetchRealtimeValidations({ name: 'test' }));
+    //   mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+    //   expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
+    //   expect(props.onChangeHandler).toHaveBeenCalledWith(
+    //     { target: { name: 'organization' } },
+    //     { organizationCode: 'orgX1', displayValue: 'Demo Org 1' },
+    //   );
+    // });
+
+    it('should set option on dropdown menu item click', () => {
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+
+      organizationField.find('.pgn__form-autosuggest__icon-button').first().simulate('click');
+      organizationField.find('.dropdown-item').first().simulate('click');
+
+      expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
+      expect(props.onChangeHandler).toHaveBeenCalledWith(
+        { target: { name: 'organization' } },
+        { organizationCode: 'orgX1', displayValue: 'Demo Org 1' },
+      );
     });
 
-    it('should clear the registration validation error on focus on field', () => {
-      const nameError = 'temp error';
-      store = mockStore({
-        ...initialState,
-        register: {
-          ...initialState.register,
-          registrationError: {
-            name: [{ userMessage: nameError }],
-          },
-        },
-      });
+    it('should set value on change', () => {
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
 
-      store.dispatch = jest.fn(store.dispatch);
-      const nameField = mount(routerWrapper(reduxWrapper(<IntlNameField {...props} />)));
-      nameField.find('input#name').simulate('focus', { target: { value: 'test', name: 'name' } });
-      expect(store.dispatch).toHaveBeenCalledWith(clearRegistrationBackendError('name'));
+      organizationField.find('input[name="organization"]').simulate(
+        'change', { target: { value: 'Demo Org 1', name: 'organization' } },
+      );
+
+      expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
+      expect(props.onChangeHandler).toHaveBeenCalledWith(
+        { target: { name: 'organization' } },
+        { organizationCode: '', displayValue: 'Demo Org 1' },
+      );
     });
+
+    // it('should display error on invalid organization input', () => {
+    //   props = {
+    //     ...props,
+    //     errorMessage: 'organization error message',
+    //   };
+
+    //   const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+
+    //   expect(organizationField.find('div[feedback-for="organization"]').text()).toEqual('organization error message');
+    // });
   });
 });
