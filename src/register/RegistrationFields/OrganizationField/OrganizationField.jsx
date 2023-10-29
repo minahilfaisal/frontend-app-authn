@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -29,7 +29,7 @@ const OrganizationField = (props) => {
   } = props;
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-  const organizationList = useSelector(state => state.register.backendOrganizationsList);
+  const [organizationList, setOrganizationList] = useState(useSelector(state => state.register.backendOrganizationsList));
 
   const handleOnBlur = (event) => {
     // Do not run validations when drop-down arrow is clicked
