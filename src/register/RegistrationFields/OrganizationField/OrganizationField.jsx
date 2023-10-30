@@ -22,6 +22,7 @@ import messages from '../../messages';
  */
 const OrganizationField = (props) => {
   const {
+    organizationList,
     selectedOrganization,
     onChangeHandler,
     handleErrorChange,
@@ -29,7 +30,6 @@ const OrganizationField = (props) => {
   } = props;
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-  const [organizationList, setOrganizationList] = useState(useSelector(state => state.register.backendOrganizationsList));
 
   const handleOnBlur = (event) => {
     // Do not run validations when drop-down arrow is clicked

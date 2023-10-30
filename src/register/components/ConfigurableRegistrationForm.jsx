@@ -37,12 +37,8 @@ const ConfigurableRegistrationForm = (props) => {
   } = props;
   const dispatch = useDispatch();
 
-  const myfunc = () => {
-    dispatch(fetchOrganizationList());
-  };
-
   const countryList = useMemo(() => getCountryList(getLocale()), []);
-  const organizationList = useMemo(() => getCountryList(getLocale()), []);
+  const [organizationList, setOrganizationList] = useState(useSelector(state => state.register.backendOrganizationsList));
 
   let showTermsOfServiceAndHonorCode = true;
   let showCountryField = true;
@@ -58,13 +54,16 @@ const ConfigurableRegistrationForm = (props) => {
 
   useEffect(() => {
     if (!formFields.country) {
-      myfunc()
       setFormFields(prevState => ({ ...prevState, country: { countryCode: '', displayValue: '' } }));
     }
     if (!formFields.organization) {
+      dispatch(fetchOrganizationList());
       setFormFields(prevState => ({ ...prevState, organization: { organizationCode: '', displayValue: '' } }));
     }
-  });
+    if (organizationList.length == 0) {
+      setOrganizationList(useSelector(state => state.register.backendOrganizationsList));
+    }
+  }, [organizationList]);
 
   /**
    * If auto submitting register form, we will check tos and honor code fields if they exist for feature parity.

@@ -78,7 +78,7 @@ describe('OrganizationField', () => {
     });
 
     const emptyFieldValidation = {
-      organization: 'Select your organization.',
+      organization: 'Please choose your organization',
     };
 
     it('should run organization field validation when onBlur is fired', () => {
@@ -122,23 +122,6 @@ describe('OrganizationField', () => {
       );
     });
 
-    // it('should update state and store list of organizations in redux store', () => {
-    //   store = mockStore({
-    //     ...initialState,
-    //     register: {
-    //       ...initialState.register,
-    //       backendOrganizationList: [],
-    //     },
-    //   });
-
-    //   mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
-    //   expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
-    //   expect(props.onChangeHandler).toHaveBeenCalledWith(
-    //     { target: { name: 'organization' } },
-    //     { organizationCode: 'orgX1', displayValue: 'Demo Org 1' },
-    //   );
-    // });
-
     it('should set option on dropdown menu item click', () => {
       const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
 
@@ -147,8 +130,7 @@ describe('OrganizationField', () => {
 
       expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
       expect(props.onChangeHandler).toHaveBeenCalledWith(
-        { target: { name: 'organization' } },
-        { organizationCode: 'orgX1', displayValue: 'Demo Org 1' },
+        { target: { name: 'organization' } }, null, 'Demo Org 1',
       );
     });
 
@@ -161,20 +143,19 @@ describe('OrganizationField', () => {
 
       expect(props.onChangeHandler).toHaveBeenCalledTimes(1);
       expect(props.onChangeHandler).toHaveBeenCalledWith(
-        { target: { name: 'organization' } },
-        { organizationCode: '', displayValue: 'Demo Org 1' },
+        { target: { name: 'organization' } }, null, 'Demo Org 1',
       );
     });
 
-    // it('should display error on invalid organization input', () => {
-    //   props = {
-    //     ...props,
-    //     errorMessage: 'organization error message',
-    //   };
+    it('should display error on invalid organization input', () => {
+      props = {
+        ...props,
+        errorMessage: 'organization error message',
+      };
 
-    //   const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
+      const organizationField = mount(routerWrapper(reduxWrapper(<IntlOrganizationField {...props} />)));
 
-    //   expect(organizationField.find('div[feedback-for="organization"]').text()).toEqual('organization error message');
-    // });
+      expect(organizationField.find('div[feedback-for="organization"]').text()).toEqual('organization error message');
+    });
   });
 });
