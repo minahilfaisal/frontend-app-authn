@@ -38,7 +38,6 @@ const ConfigurableRegistrationForm = (props) => {
   const dispatch = useDispatch();
 
   const countryList = useMemo(() => getCountryList(getLocale()), []);
-  const [organizationList, setOrganizationList] = useState(useSelector(state => state.register.backendOrganizationsList));
 
   let showTermsOfServiceAndHonorCode = true;
   let showCountryField = true;
@@ -60,10 +59,7 @@ const ConfigurableRegistrationForm = (props) => {
       dispatch(fetchOrganizationList());
       setFormFields(prevState => ({ ...prevState, organization: { organizationCode: '', displayValue: '' } }));
     }
-    if (organizationList.length == 0) {
-      setOrganizationList(useSelector(state => state.register.backendOrganizationsList));
-    }
-  }, [organizationList]);
+  });
 
   /**
    * If auto submitting register form, we will check tos and honor code fields if they exist for feature parity.
@@ -198,7 +194,7 @@ const ConfigurableRegistrationForm = (props) => {
     formFieldDescriptions.push(
       <span key="organization">
         <OrganizationField
-          organizationList={organizationList}
+          organizationList={useSelector(state => state.register.backendOrganizationsList)}
           selectedCountry={formFields.organization}
           errorMessage={fieldErrors.organization || ''}
           onChangeHandler={handleOnChange}
