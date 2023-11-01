@@ -107,10 +107,7 @@ OrganizationField.propTypes = {
   onChangeHandler: PropTypes.func.isRequired,
   handleErrorChange: PropTypes.func.isRequired,
   onFocusHandler: PropTypes.func.isRequired,
-  selectedOrganization: PropTypes.shape({
-    displayValue: PropTypes.string,
-    organizationCode: PropTypes.string,
-  }),
+  selectedOrganization: PropTypes.string,
 };
 
 OrganizationField.defaultProps = {

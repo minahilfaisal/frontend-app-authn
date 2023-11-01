@@ -16,7 +16,7 @@ export const storeName = 'register';
 
 export const defaultState = {
   backendCountryCode: '',
-  backendOrganizationsList: [],
+  backendOrganizationsList: [{}],
   registrationError: {},
   registrationResult: {},
   registrationFormData: {
@@ -53,6 +53,7 @@ const reducer = (state = defaultState, action = {}) => {
         ...defaultState,
         usernameSuggestions: state.usernameSuggestions,
         registrationFormData: { ...action.payload },
+        backendOrganizationsList: state.backendOrganizationsList,
         userPipelineDataLoaded: state.userPipelineDataLoaded,
       };
     case REGISTER_NEW_USER.BEGIN:

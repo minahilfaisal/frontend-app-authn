@@ -53,11 +53,8 @@ const ConfigurableRegistrationForm = (props) => {
 
   useEffect(() => {
     if (!formFields.country) {
-      setFormFields(prevState => ({ ...prevState, country: { countryCode: '', displayValue: '' } }));
-    }
-    if (!formFields.organization) {
       dispatch(fetchOrganizationList());
-      setFormFields(prevState => ({ ...prevState, organization: { organizationCode: '', displayValue: '' } }));
+      setFormFields(prevState => ({ ...prevState, country: { countryCode: '', displayValue: '' } }));
     }
   });
 
@@ -195,7 +192,7 @@ const ConfigurableRegistrationForm = (props) => {
       <span key="organization">
         <OrganizationField
           organizationList={useSelector(state => state.register.backendOrganizationsList)}
-          selectedCountry={formFields.organization}
+          selectedOrganization={formFields.organization}
           errorMessage={fieldErrors.organization || ''}
           onChangeHandler={handleOnChange}
           handleErrorChange={handleErrorChange}
