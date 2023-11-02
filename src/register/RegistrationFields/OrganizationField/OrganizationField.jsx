@@ -73,7 +73,7 @@ const OrganizationField = (props) => {
         floatingLabel={formatMessage(messages['registration.organization.label'])}
         aria-label="form autosuggest"
         name="organization"
-        value={selectedOrganization.displayValue || ''}
+        value={selectedOrganization || ''}
         onSelected={(value) => handleSelected(value)}
         onFocus={(e) => handleOnFocus(e)}
         onBlur={(e) => handleOnBlur(e)}
@@ -112,9 +112,7 @@ OrganizationField.propTypes = {
 
 OrganizationField.defaultProps = {
   errorMessage: null,
-  selectedOrganization: {
-    value: '',
-  },
+  selectedOrganization: '',
 };
 
 export default OrganizationField;

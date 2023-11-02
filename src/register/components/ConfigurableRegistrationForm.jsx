@@ -251,6 +251,7 @@ ConfigurableRegistrationForm.propTypes = {
       displayValue: PropTypes.string,
       countryCode: PropTypes.string,
     }),
+    organization: PropTypes.string,
     honor_code: PropTypes.bool,
     marketingEmailsOptIn: PropTypes.bool,
   }).isRequired,

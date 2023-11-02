@@ -16,7 +16,7 @@ export const storeName = 'register';
 
 export const defaultState = {
   backendCountryCode: '',
-  backendOrganizationsList: [{}],
+  backendOrganizationsList: [],
   registrationError: {},
   registrationResult: {},
   registrationFormData: {
