@@ -56,10 +56,7 @@ describe('OrganizationField', () => {
         [ORGANIZATION_CODE_KEY]: 'orgX1',
         [ORGANIZATION_DISPLAY_KEY]: 'Demo Org 1',
       }],
-      selectedOrganization: {
-        organizationCode: '',
-        displayValue: '',
-      },
+      selectedOrganization: '',
       errorMessage: '',
       onChangeHandler: jest.fn(),
       handleErrorChange: jest.fn(),

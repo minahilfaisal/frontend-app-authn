@@ -272,7 +272,7 @@ const RegistrationPage = (props) => {
         <Helmet>
           <title>{formatMessage(messages['register.page.title'], { siteName: getConfig().SITE_NAME })}</title>
         </Helmet>
-        {/* <RedirectLogistration
+        <RedirectLogistration
           host={host}
           authenticatedUser={registrationResult.authenticatedUser}
           success={registrationResult.success}
@@ -283,7 +283,7 @@ const RegistrationPage = (props) => {
           redirectToProgressiveProfilingPage={
             getConfig().ENABLE_PROGRESSIVE_PROFILING_ON_AUTHN && !!Object.keys(optionalFields.fields).length
           }
-        /> */}
+        />
         {autoSubmitRegForm && !errorCode.type ? (
           <div className="mw-xs mt-5 text-center">
             <Spinner animation="border" variant="primary" id="tpa-spinner" />
