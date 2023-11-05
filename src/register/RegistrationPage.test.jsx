@@ -106,6 +106,7 @@ describe('RegistrationPage', () => {
       registrationError: {},
       registrationFormData,
       usernameSuggestions: [],
+      backendOrganizationsList: [],
     },
     commonComponents: {
       thirdPartyAuthApiStatus: null,
@@ -147,6 +148,9 @@ describe('RegistrationPage', () => {
     registrationPage.find('input[name="country"]').simulate('change', { target: { value: payload.country, name: 'country' } });
     registrationPage.find('input[name="country"]').simulate('blur', { target: { value: payload.country, name: 'country' } });
 
+    registrationPage.find('input[name="organization"]').simulate('change', { target: { value: payload.organization, name: 'organization' } });
+    registrationPage.find('input[name="organization"]').simulate('blur', { target: { value: payload.organization, name: 'organization' } });
+
     if (!isThirdPartyAuth) {
       registrationPage.find('input#password').simulate('change', { target: { value: payload.password, name: 'password' } });
     }
@@ -171,6 +175,7 @@ describe('RegistrationPage', () => {
       email: 'Enter your email',
       password: 'Password criteria has not been met',
       country: 'Select your country or region of residence',
+      organization: 'Please choose your organization',
     };
 
     const secondaryProviders = {
@@ -192,6 +197,7 @@ describe('RegistrationPage', () => {
         email: 'john.doe@gmail.com',
         password: 'password1',
         country: 'Pakistan',
+        organization: 'Demo Org 1',
         honor_code: true,
         totalRegistrationTime: 0,
         next: '/course/demo-course-url',
@@ -212,6 +218,7 @@ describe('RegistrationPage', () => {
         username: 'john_doe',
         email: 'john.doe@example.com',
         country: 'Pakistan',
+        organization: 'Demo Org 1',
         honor_code: true,
         social_auth_provider: ssoProvider.name,
         totalRegistrationTime: 0,
@@ -248,6 +255,7 @@ describe('RegistrationPage', () => {
         email: 'john.doe@gmail.com',
         password: 'password1',
         country: 'Pakistan',
+        organization: 'Demo Org 1',
         honor_code: true,
         totalRegistrationTime: 0,
         marketing_emails_opt_in: true,
@@ -283,6 +291,7 @@ describe('RegistrationPage', () => {
       expect(registrationPage.find('div[feedback-for="email"]').text()).toEqual(emptyFieldValidation.email);
       expect(registrationPage.find('div[feedback-for="password"]').text()).toContain(emptyFieldValidation.password);
       expect(registrationPage.find('div[feedback-for="country"]').text()).toEqual(emptyFieldValidation.country);
+      expect(registrationPage.find('div[feedback-for="organization"]').text()).toEqual(emptyFieldValidation.organization);
 
       const alertBanner = 'We couldn\'t create your account.Please check your responses and try again.';
       expect(registrationPage.find('#validation-errors').first().text()).toEqual(alertBanner);
@@ -1064,6 +1073,7 @@ describe('RegistrationPage', () => {
         username: 'john_doe',
         email: 'john.doe@example.com',
         country: 'PK',
+        organization: 'Demo Org 1',
         social_auth_provider: 'Apple',
         totalRegistrationTime: 0,
       }));
@@ -1145,6 +1155,7 @@ describe('RegistrationPage', () => {
         email: 'john.doe@example.com',
         password: 'password1',
         country: 'Pakistan',
+        organization: 'Demo Org 1',
         honor_code: true,
         profession: 'Engineer',
         totalRegistrationTime: 0,

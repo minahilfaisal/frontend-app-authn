@@ -60,6 +60,22 @@ export const isFormValid = (
     }
   });
 
+  if (!configurableFormFields?.organization) {
+    fieldErrors.organization = formatMessage(messages['empty.organization.field.error']);
+    isValid = false;
+  }
+
+  Object.keys(fieldDescriptions).forEach(key => {
+    if (key === 'organization' && !configurableFormFields.organization) {
+      fieldErrors[key] = formatMessage(messages['empty.organization.field.error']);
+    } else if (!configurableFormFields[key]) {
+      fieldErrors[key] = fieldDescriptions[key].error_message;
+    }
+    if (fieldErrors[key]) {
+      isValid = false;
+    }
+  });
+
   return { isValid, fieldErrors };
 };
 

@@ -11,6 +11,7 @@ import configureStore from 'redux-mock-store';
 
 import ConfigurableRegistrationForm from './ConfigurableRegistrationForm';
 import { FIELDS } from '../data/constants';
+import { ORGANIZATION_CODE_KEY, ORGANIZATION_DISPLAY_KEY } from '../RegistrationFields/OrganizationField/validator';
 
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendPageEvent: jest.fn(),
@@ -90,6 +91,7 @@ describe('ConfigurableRegistrationForm', () => {
       registrationError: {},
       registrationFormData,
       usernameSuggestions: [],
+      backendOrganizationsList: [],
     },
     commonComponents: {
       thirdPartyAuthApiStatus: null,
@@ -155,6 +157,10 @@ describe('ConfigurableRegistrationForm', () => {
             countryCode: '',
             displayValue: '',
           },
+          organization: {
+            organizationCode: '',
+            displayValue: '',
+          },
         },
         fieldDescriptions: {
           terms_of_service: {
@@ -173,12 +179,12 @@ describe('ConfigurableRegistrationForm', () => {
         <IntlConfigurableRegistrationForm {...props} />,
       )));
 
-      expect(props.setFormFields).toHaveBeenCalledTimes(2);
+      expect(props.setFormFields).toHaveBeenCalledTimes(3);
       expect(props.setFormFields.mock.calls[0][0]()).toEqual({
         [FIELDS.HONOR_CODE]: true,
       });
 
-      expect(props.setFormFields.mock.calls[1][0]()).toEqual({
+      expect(props.setFormFields.mock.calls[2][0]()).toEqual({
         [FIELDS.TERMS_OF_SERVICE]: true,
       });
     });

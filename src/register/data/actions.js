@@ -2,6 +2,7 @@ import { AsyncActionType } from '../../data/utils';
 
 export const BACKUP_REGISTRATION_DATA = new AsyncActionType('REGISTRATION', 'BACKUP_REGISTRATION_DATA');
 export const REGISTER_FORM_VALIDATIONS = new AsyncActionType('REGISTRATION', 'GET_FORM_VALIDATIONS');
+export const REGISTER_FORM_ORGANIZATIONS = new AsyncActionType('REGISTRATION', 'GET_FORM_ORGANIZATIONS');
 export const REGISTER_NEW_USER = new AsyncActionType('REGISTRATION', 'REGISTER_NEW_USER');
 export const REGISTER_CLEAR_USERNAME_SUGGESTIONS = 'REGISTRATION_CLEAR_USERNAME_SUGGESTIONS';
 export const REGISTRATION_CLEAR_BACKEND_ERROR = 'REGISTRATION_CLEAR_BACKEND_ERROR';
@@ -35,6 +36,24 @@ export const fetchRealtimeValidationsSuccess = (validations) => ({
 
 export const fetchRealtimeValidationsFailure = () => ({
   type: REGISTER_FORM_VALIDATIONS.FAILURE,
+});
+
+// get organizations list from backend
+export const fetchOrganizationList = () => ({
+  type: REGISTER_FORM_ORGANIZATIONS.BASE,
+});
+
+export const fetchOrganizationListBegin = () => ({
+  type: REGISTER_FORM_ORGANIZATIONS.BEGIN,
+});
+
+export const fetchOrganizationListSuccess = (organizations) => ({
+  type: REGISTER_FORM_ORGANIZATIONS.SUCCESS,
+  payload: { organizations },
+});
+
+export const fetchOrganizationListFailure = () => ({
+  type: REGISTER_FORM_ORGANIZATIONS.FAILURE,
 });
 
 // Register
